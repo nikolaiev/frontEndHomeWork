@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FileStorage</title>
+    <link rel="stylesheet" href="css/myCss.css" type="text/css">
+    <script src="js/mySortJs.js"></script>
+</head>
+
+<body>
+<header>header</header>
+
+<div id="container">
+    <div id="pseudo-header">
+        <span class="left-span">Вы вошли в систему как
+            <b>
+                Иванов Иван Иванович.
+            </b>
+            <a href="index.html">Выйти.</a>
+        </span>
+    </div>
+
+    <aside>
+        <span class="span-info"><b>Можно загружать:</b></span>
+        <span class="span-info">ZIP (до 20 Mb);</span>
+        <span class="span-info">DOCX (до 40 Mb);</span>
+        <span class="span-info">PPTX (до 50 Mb);</span>
+        <br>
+        <span class="span-info"><b>Использовано:</b></span>
+        <span class="span-info">27.34 Mb из 100.00 Mb</span>
+    </aside>
+
+    <section>
+
+            <table id="content-table">
+                <tr>
+                    <th>Файл</th>
+                    <th>Размер (Kb)</th>
+                    <th>Дата и время</th>
+                    <th>Удалить</th>
+                </tr>
+
+                <tr>
+                    <td><a href="#">Какой-то файл</a></td>
+                    <td>131.2</td>
+                    <td>2014.02.28 18:0115</td>
+                    <td><a href="#" class="link-delete">Удалить</a></td>
+                </tr>
+
+                <tr>
+                    <td><a href="#">Какой-то файл2</a></td>
+                    <td>131.2</td>
+                    <td>2014.02.28 18:0115</td>
+                    <td><a href="#" class="link-delete">Удалить</a></td>
+                </tr>
+            </table>
+
+            <div class="bordered">
+                <label class="stick-label">
+                    <span class="left-label">Загрузить новый файл :</span>
+                </label>
+
+                <div class="controls-group">
+                    <button class="left-button">Выбрать</button>
+                    <input type="text" class="left-input">
+                    <button class="left-button">Загрузить</button>
+                </div>
+
+
+                <label class="stick-label">
+                    <span class="left-label">Запросить с удаленного сревера :</span>
+                </label>
+
+
+                <div class="controls-group">
+                    <input type="text" class="left-input wide">
+                </div>
+
+                <label class="stick-label">
+                    <span class="left-label">Поместить в хранилеще :</span>
+                    <input type="checkbox" class="stick-input"/>
+                </label>
+
+                <div class="controls-group">
+                    <button type="submit"  class="left-button">Запросить</button>
+                </div>
+
+                <br>
+            </div>
+        <br >
+
+
+    </section>
+
+    <aside>
+        <span class="span-info"><b>Статистика:</b></span>
+        <span class="span-info">Пользователей : 123</span>
+        <span class="span-info">Файлов : 1234</span>
+        <span class="span-info">Объем : 2345 Mb</span>
+        <span class="span-info">Объем / польз : 45 Mb</span>
+    </aside>
+</div>
+<footer>
+    @ 2014, EPAM RD PHP Training
+</footer>
+</body>
+
+
+</html>

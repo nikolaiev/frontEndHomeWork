@@ -37,11 +37,11 @@ header:before,header:after{
 section{
     position: relative;
     float: left;
-    border-bottom: 1px solid;
     border-left: 1px solid;
     border-right: 1px solid;
     height: 100%;
     width:50%;
+
     /*border inside box*/
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -54,11 +54,6 @@ section{
 aside{
     position: relative;
     float: left;
-    border-bottom: 1px solid;
-
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
     height: 100%;
     width:25%;
 }
@@ -68,10 +63,12 @@ aside{
     margin: auto;
     width: 75%;
     height: 50%;
+    overflow: hidden;
     position: relative;
     background: url("img/cat.png") repeat;
-    background-size:40% 100%;
-
+    background-size:700px 500px;
+    border-bottom: 1px solid;
+    display:table;
 }
 
 #pseudo-header{
@@ -109,11 +106,76 @@ aside{
     float: left;
     margin-left: 10px;
 }
+.span-info{
+    clear: left;
+    position: relative;
+    float: left;
+    margin-left: 10px;
+}
 
-#login-form{
+.bordered{
     width: 50%;
     margin: 2% 2%;
     padding: 2% 2%;
     border: solid 1px;
+    float: left;
+    position: relative;
 }
 
+
+.left-label{
+    position: relative;
+    float: left;
+}
+
+.left-button{
+    width: 25%;
+    margin-top: 5px;
+    clear: both;
+    position: relative;
+    float: left;
+}
+
+.controls-group{
+    margin: 10px;
+}
+
+.left-input{
+    margin: 5px 5px 5px 20px;
+    position: relative;
+    float: left;
+}
+
+.wide{
+    margin: auto;
+    width: 100%;
+}
+
+
+
+/*Table styles*/
+
+#content-table {
+    margin: 10px auto auto;
+    width:95%;
+    border-collapse: collapse;
+    border-top:solid 1px;
+}
+
+
+tr{
+    border-bottom:solid 1px;
+}
+
+th:hover{
+    cursor: pointer;
+    background-color: aliceblue;
+}
+
+
+td{
+    padding: 10px;
+}
+.link-delete{
+    color: red;
+}
