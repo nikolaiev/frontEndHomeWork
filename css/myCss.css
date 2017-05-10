@@ -1,0 +1,68 @@
+body{
+    text-align: center;
+}
+footer{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    background-color: #efefef;
+    text-align: center;
+}
+
+header{
+    text-align: center;
+}
+
+aside, section{
+    position: relative;
+    float: left;
+    border: 1px solid;
+
+
+}
+aside{
+    width: 24%;
+}
+
+
+section{
+    width: 50%;
+}
+
+#container{
+    margin: auto;
+    width: 75%;
+}
+
+
+.stick-button{
+    position: relative;
+    clear:both;
+    float: left;
+}
+.stick-label{
+    position: relative;
+    clear: both;
+
+}
+
+.stick-span{
+    float: left;
+    width: 75px;
+    text-align: right;
+}
+
+.stick-input{
+    position: relative;
+    float: left;
+}
+
+#login-form{
+    width: 50%;
+    border: solid 1px;
+    margin: 10px 10px;
+    padding: 5px;
+}
+
