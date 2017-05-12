@@ -101,6 +101,16 @@ aside{
     text-align: right;
 }
 
+.stick-span-right{
+    position:relative;
+    margin: 20px;
+    clear: both;
+    float: left;
+    width: 100%;
+    text-align: left;
+    color:red;
+}
+
 .stick-input{
     position: relative;
     float: left;

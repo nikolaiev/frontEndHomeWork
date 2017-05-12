@@ -20,18 +20,17 @@
             </aside>
 
             <section>
-
-                <form class="bordered" method="get" action="logged.html">
+                 <form class="bordered" method="get" action="logged.html">
 
                     <label class="stick-label">
                         <span class="stick-span">login</span>
-                        <input type="text" placeholder="login" class="stick-input" />
+                        <input type="text" placeholder="login" class="stick-input"  id="login_input"/>
                     </label>
 
 
                     <label class="stick-label">
                         <span class="stick-span">password</span>
-                        <input type="password" placeholder="password" class="stick-input"/>
+                        <input type="password" placeholder="password" class="stick-input" id="password_input"/>
                     </label>
 
 
@@ -41,10 +40,13 @@
                         <input type="checkbox" class="stick-input"/>
                     </label>
 
-                    <button type="submit" class="stick-button">Log in</button>
+                    <button type="submit" class="stick-button" id="submit_button">Log in</button>
                     <br>
                     <br>
                 </form>
+
+                <span id="message_span" class="stick-span-right"></span>
+
 
             </section>
 
