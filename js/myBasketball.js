@@ -1,109 +1,91 @@
-/**
- * Created by vlad on 10.05.17.
- */
+(function(){
+        window.addEventListener("load", init, false);
 
-window.onload=()=>{
+        let basketRect;
+        let scoreSpan;
+        let score=0;
 
-    let loginInput=document.getElementById('login_input');
-    let passwordInput=document.getElementById('password_input');
-    let submitButton=document.getElementById('submit_button');
-    let messageSpan=document.getElementById('message_span');
+        function init() {
+            let ball = document.getElementById("ball");
+            let basket = document.getElementById("basket");
 
-    const spaceCode=" ".charCodeAt();
+            scoreSpan = document.getElementById("score");
+            basketRect = basket.getBoundingClientRect();
 
-    loginInput.onkeydown=(e)=>{
-        if(e.keyCode===spaceCode){
-            e.preventDefault();
-        }
-    };
-
-    passwordInput.onkeydown=(e)=>{
-        if(e.keyCode===spaceCode){
-            e.preventDefault();
-        }
-    };
-
-    submitButton.onclick=(e)=>{
-
-        if(!isLoginValid()
-            || !isPasswordValid()){
-            e.preventDefault();
-        }
-    };
-
-    function isLoginValid() {
-        let login=loginInput.value;
-
-        //fast email check
-        if(/^[0-9a-zA-ZА-Яа-яЇїІіЄє_.\-]{4,20}@[a-zA-ZА-Яа-яЇїІіЄє]{2,5}(\.[a-zA-ZА-Яа-яЇїІіЄє]{2,5})+$/ig.test(login)){
-            return true;
+            ball.addEventListener("mousedown", function (e) {
+                drag(this, e);
+             });
         }
 
-        //something is wrong
+        function drag(elementToDrag, event) {
+            // координаты мыши в начале перетаскивания.
+            let startX = event.clientX,
+                startY = event.clientY;
 
-        if(!/^[0-9a-zA-ZА-Яа-яЇїІіЄє_\.\-]{4,20}@/ig.test(login)){
-            messageSpan.innerHTML="Email must have at least 4 and not greater than 20 symbols before @";
-            return false;
-        }
+            // начальные координаты элемента, который будет перемещаться.
+            let origX = elementToDrag.offsetLeft,
+                origY = elementToDrag.offsetTop;
 
-        if(/^[0-9_\.\-]{4,20}@/ig.test(login)){
-            messageSpan.innerHTML="Email must have at least 1 letter symbol before @";
-            return false;
-        }
+            // разница между координатами мыши и координатами перетаскиваемого элемента.
+            let deltaX = startX - origX,
+                deltaY = startY - origY;
 
-        if(!/@[a-zA-ZА-Яа-яЇїІіЄє]{2,5}\.[^$]/ig.test(login)){
-            messageSpan.innerHTML="Email must have at least 2 and not greater than 5 letter after @";
-            return false;
-        }
+            // Регистрация событий mouseup и mousemove
+            document.addEventListener("mousemove", moveHandler,true);
+            document.addEventListener("mouseup", upHandler,true);
 
-        if(login.match(/@/g).length>1){
-            messageSpan.innerHTML="Email can't have more than 1 @ element";
-            return false;
-        }
+            function moveHandler(e) {
+                if (!e) e = window.event;
 
-        if(!/@[a-zA-ZА-Яа-яЇїІіЄє]{2,5}(\.[a-zA-ZА-Яа-яЇїІіЄє]{2,5}){1,2}$/ig.test(login)){
-            messageSpan.innerHTML="Email must have at least 2 domain names,\n that have at least 2 and not greater than 5 letter";
-            return false;
-        }
+                /*new ball coordinates*/
+                let newLeft=(e.clientX - deltaX);
+                let newTop=(e.clientY - deltaY);
+
+                /*accuracy*/
+                let delta=10;
+
+                if( checkInDiapason(newLeft,basketRect.left-delta,basketRect.right+delta)
+                    &&
+                    checkInDiapason(newTop,basketRect.top-delta,basketRect.bottom+delta)
+                ){
+                    elementToDrag.style.left = "100px";
+                    elementToDrag.style.top = "100px";
+
+                    updateScore();
+                }
+                else
+                {
+                    // перемещаем элемент с учетом отступа от первоначального клика.
+                    elementToDrag.style.left = newLeft + "px";
+                    elementToDrag.style.top = newTop + "px";
+                }
+            }
+
+            function upHandler(e) {
+                if (!e) e = window.event;
+
+                document.removeEventListener("mouseup", upHandler,true);
+                document.removeEventListener("mousemove", moveHandler,true);
+            }
 
 
-        return true;
-    }
+            function updateScore(){
+                scoreSpan.innerHTML=++score;
 
-    function isPasswordValid(){
-        let mandatoryChars=['$','!','&'];
-        let password=passwordInput.value;
+                document.removeEventListener("mouseup", upHandler,true);
+                document.removeEventListener("mousemove", moveHandler,true);
 
-        /*In case of RegEx
-                /.*{8,20}/.test(password)
-          (works slower)
-        */
-        if(password.length<8 ||password.length>20 ){
-            messageSpan.innerHTML="Password must be in range of (8, 20) symbols";
-            return false;
-        }
+            }
 
-        if(!/[A-ZА-ЯЇІЄ]/g.test(password)){
-            messageSpan.innerHTML="Password must contain upper case letter";
-            return false;
-        }
+            function checkInDiapason(val,boundMin,boundMax){
 
-        if(!/[a-zа-яїіє]/g.test(password)){
-            messageSpan.innerHTML="Password must contain lower case letter";
-            return false;
-        }
+                if(boundMax<boundMin){
+                   let temp=boundMax;
+                    boundMax=boundMin;
+                    boundMin=temp;
+                }
 
-        for(let index in mandatoryChars) {
-            let char=mandatoryChars[index];
-            let regEx=new RegExp("["+char+"]+");
-
-            if (!regEx.test(password)) {
-                messageSpan.innerHTML = "Password must contain at least 1 "+char+" letter";
-                return false;
+                return val<=boundMax && val>=boundMin;
             }
         }
-        return true;
-    }
-};
-
-
+    })();
