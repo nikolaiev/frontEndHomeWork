@@ -1,38 +1,84 @@
-/**
- * Created by vlad on 10.05.17.
- */
+$(()=>{
+    const MAX_LOGIN_LETTERS=20;
+    const MIN_PASSWORD_LETTERS=40;
 
-window.onload=()=>{
+    const SPACE_CODE=" ".charCodeAt();
+    const LETTERS_STR=" символов";
+    const LETTERS_LEFT="Осталось ввести ";
+    const LETTERS_OVER="Лимит превышен на ";
 
-    let loginInput=document.getElementById('login_input');
-    let passwordInput=document.getElementById('password_input');
-    let submitButton=document.getElementById('submit_button');
-    let messageSpan=document.getElementById('message_span');
+    let loginInput=$('#login_input');
+    let passwordInput=$('#password_input');
+    let submitButton=$('#submit_button');
+    let messageSpan=$('#message_span');
+    let lettersMessageSpan=$('#message_span_right');
 
-    const spaceCode=" ".charCodeAt();
 
-    loginInput.onkeydown=(e)=>{
-        if(e.keyCode===spaceCode){
+    loginInput.keydown((e)=>{
+        if(e.keyCode===SPACE_CODE){
             e.preventDefault();
         }
-    };
+    });
 
-    passwordInput.onkeydown=(e)=>{
-        if(e.keyCode===spaceCode){
+    loginInput.on("cut copy paste",(e)=>{
+       e.preventDefault();
+    });
+
+    loginInput.keyup((e)=>{
+        /*login length*/
+        let len=loginInput.val().length;
+
+        if(len<MAX_LOGIN_LETTERS){
+            lettersMessageSpan.html(LETTERS_LEFT+(MAX_LOGIN_LETTERS-len)+LETTERS_STR);
+            return;
+        }
+
+        if(len>MAX_LOGIN_LETTERS){
+            lettersMessageSpan.html(LETTERS_OVER+(len-MAX_LOGIN_LETTERS)+LETTERS_STR);
+            return;
+        }
+
+        /*clear span*/
+        lettersMessageSpan.html("");
+    });
+
+    passwordInput.keydown((e)=>{
+        if(e.keyCode===SPACE_CODE){
             e.preventDefault();
         }
-    };
+    });
 
-    submitButton.onclick=(e)=>{
+    passwordInput.on("cut copy paste",(e)=>{
+        e.preventDefault();
+    });
+    passwordInput.keydown((e)=>{
+        /*login length*/
+        let len=passwordInput.val().length;
+
+        if(len<MIN_PASSWORD_LETTERS){
+            lettersMessageSpan.html(LETTERS_LEFT+(MIN_PASSWORD_LETTERS-len)+LETTERS_STR);
+            return;
+        }
+
+        if(len>MIN_PASSWORD_LETTERS){
+            lettersMessageSpan.html(LETTERS_OVER+(len-MIN_PASSWORD_LETTERS)+LETTERS_STR);
+            return;
+        }
+
+        /*clear span*/
+        lettersMessageSpan.html("");
+    });
+
+    submitButton.click((e)=>{
 
         if(!isLoginValid()
             || !isPasswordValid()){
             e.preventDefault();
         }
-    };
+    });
 
     function isLoginValid() {
-        let login=loginInput.value;
+        let login=loginInput.val();
 
         //fast email check
         if(/^[0-9a-zA-ZА-Яа-яЇїІіЄє_.\-]{4,20}@[a-zA-ZА-Яа-яЇїІіЄє]{2,5}(\.[a-zA-ZА-Яа-яЇїІіЄє]{2,5})+$/ig.test(login)){
@@ -42,27 +88,27 @@ window.onload=()=>{
         //something is wrong
 
         if(!/^[0-9a-zA-ZА-Яа-яЇїІіЄє_\.\-]{4,20}@/ig.test(login)){
-            messageSpan.innerHTML="Email must have at least 4 and not greater than 20 symbols before @";
+            messageSpan.html("Email must have at least 4 and not greater than 20 symbols before @");
             return false;
         }
 
         if(/^[0-9_\.\-]{4,20}@/ig.test(login)){
-            messageSpan.innerHTML="Email must have at least 1 letter symbol before @";
+            messageSpan.html("Email must have at least 1 letter symbol before @");
             return false;
         }
 
         if(!/@[a-zA-ZА-Яа-яЇїІіЄє]{2,5}\.[^$]/ig.test(login)){
-            messageSpan.innerHTML="Email must have at least 2 and not greater than 5 letter after @";
+            messageSpan.html("Email must have at least 2 and not greater than 5 letter after @");
             return false;
         }
 
         if(login.match(/@/g).length>1){
-            messageSpan.innerHTML="Email can't have more than 1 @ element";
+            messageSpan.html("Email can't have more than 1 @ element");
             return false;
         }
 
         if(!/@[a-zA-ZА-Яа-яЇїІіЄє]{2,5}(\.[a-zA-ZА-Яа-яЇїІіЄє]{2,5})+$/ig.test(login)){
-            messageSpan.innerHTML="Email must have at least 2 domain names,\n that have at least 2 and not greater than 5 letter";
+            messageSpan.html("Email must have at least 2 domain names,\n that have at least 2 and not greater than 5 letter");
             return false;
         }
 
@@ -72,24 +118,24 @@ window.onload=()=>{
 
     function isPasswordValid(){
         let mandatoryChars=['$','!','&'];
-        let password=passwordInput.value;
+        let password=passwordInput.val();
 
         /*In case of RegEx
                 /.*{8,20}/.test(password)
           (works slower)
         */
         if(password.length<8 ||password.length>20 ){
-            messageSpan.innerHTML="Password must be in range of (8, 20) symbols";
+            messageSpan.html("Password must be in range of (8, 20) symbols");
             return false;
         }
 
         if(!/[A-ZА-ЯЇІЄ]/g.test(password)){
-            messageSpan.innerHTML="Password must contain upper case letter";
+            messageSpan.html("Password must contain upper case letter");
             return false;
         }
 
         if(!/[a-zа-яїіє]/g.test(password)){
-            messageSpan.innerHTML="Password must contain lower case letter";
+            messageSpan.html("Password must contain lower case letter");
             return false;
         }
 
@@ -98,12 +144,12 @@ window.onload=()=>{
             let regEx=new RegExp("["+char+"]+");
 
             if (!regEx.test(password)) {
-                messageSpan.innerHTML = "Password must contain at least 1 "+char+" letter";
+                messageSpan.html("Password must contain at least 1 "+char+" letter");
                 return false;
             }
         }
         return true;
     }
-};
+});
 
 

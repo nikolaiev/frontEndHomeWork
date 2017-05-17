@@ -1,30 +1,28 @@
 /**
  * Created by Vladyslav_Nikolaiev on 10-May-17.
  */
-window.onload=()=> {
+$(()=> {
 
     /*table id*/
-    const tableId = 'content-table';
+    const TABLE_ID = 'content-table';
 
     /*table content data*/
-    const data = [];
+    const DATA = [];
 
     /*reverse flags object*/
-    const reverseFlags = {};
+    const REVERSE_FLAGS = {};
 
     /*table generated rows count*/
-    const rowsCount = 10;
+    const ROWS_COUNT = 10;
 
     /*table element*/
-    let table=document.getElementById(tableId);
+    let table=$('#'+TABLE_ID);
 
     /*table tbody element*/
-    let tableBody = table.getElementsByTagName('tbody')[0];
+    let tableBody = $('tbody')[0];
 
     /*init tableBody*/
     init();
-
-    /*functions declarations*/
 
     /**
      * Initializes table
@@ -43,55 +41,58 @@ window.onload=()=> {
          */
         function initReverseFlags() {
             /*init reverse flags object*/
-            reverseFlags.file=true;
-            reverseFlags.size=true;
-            reverseFlags.date=true;
+            REVERSE_FLAGS.file=true;
+            REVERSE_FLAGS.size=true;
+            REVERSE_FLAGS.date=true;
         }
 
         /**
          * FulFull tableBody
          */
         function fulFillTable() {
-            for (let index = 0; index < rowsCount; index++) {
-                let row = tableBody.insertRow(0);
-                data[index] = {};
+            for (let index = 0; index < ROWS_COUNT; index++) {
+                DATA[index] = {};
 
-                /*file name*/
-                data[index].file = Math.random().toString(36).substring(7) + " " + "file name";
-                let cell = row.insertCell(0);
-                cell.innerHTML = "<a href='#'>" + data[index].file + '</a>';
-
-                /*size*/
-                data[index].size = Math.ceil(Math.random() * 1000);
-                cell = row.insertCell(-1);
-                cell.innerHTML = data[index].size;
-
-                /*date*/
-                let d = dateRandomGenerator(2,8,2);
-                data[index].date = d;
-                cell = row.insertCell(-1);
-                cell.innerHTML = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " +
-                    d.getHours() + ":" + d.getMinutes();
-
-                /*remove file button*/
-                cell = row.insertCell(-1);
-                cell.innerHTML = "<a href='#' class='link-delete'>Удалить</a>";
+                DATA[index].file = Math.random().toString(36).substring(7) + " " + "file name";
+                DATA[index].size = Math.ceil(Math.random() * 1000);
+                DATA[index].date = dateRandomGenerator(2, 8, 2);
             }
+
+            buildTable();
         }
 
         /**
          * Bind tableBody header to functionality
          */
         function bindHeaders() {
-            //array
-            let thArray=table.getElementsByTagName('th')
 
-            for(let index=0; index<thArray.length-1;index++){
-                let th=thArray[index];
-                th.onclick=(e)=>{
-                    sortDataByPropertyIndex(index);
+            //array
+            $('th:lt(3)').each((index,elem)=>{
+                $(elem).click((e)=>{
+
+                    restorePseudoElements();
+
+                    /*find key to sort*/
+                    let keySort=getKeySortByPropertyIndex(index);
+                    let isReversed=REVERSE_FLAGS[keySort];
+
+                    if(!isReversed)
+                        $(e.target).removeClass().addClass('desc');
+                    else
+                        $(e.target).removeClass().addClass('asc');
+
+                    sortDataByPropertyKey(keySort);
                     buildTable();
-                }
+                });
+            });
+
+            /**
+             * restores all th pseudo classes to default
+             */
+            function restorePseudoElements() {
+                $('th:lt(3)').each((index,elem)=>{
+                    $(elem).removeClass().addClass('none');
+                });
             }
         }
 
@@ -108,7 +109,6 @@ window.onload=()=> {
         }
     }
 
-
     /**
      *  Return key value by object's property index
      * @param index property index
@@ -118,7 +118,7 @@ window.onload=()=> {
         let keySort="";
         let tempIndexKey=0;
 
-        for(let key in data[0]){
+        for(let key in DATA[0]){
             if(tempIndexKey===index){
                 //key was found
                 keySort=key;
@@ -129,24 +129,19 @@ window.onload=()=> {
         return keySort;
     }
 
-
     /**
-     * Sorts data object by property
+     * Sorts DATA object by property
      * @param index <tr> element index
      */
-    function sortDataByPropertyIndex(index){
-
-        /*find key to sort*/
-        let keySort=getKeySortByPropertyIndex(index)
-
+    function sortDataByPropertyKey(keySort){
         /*decide what sorter to use*/
 
         //setting sort reverse flag
-        reverseFlags[keySort]=!reverseFlags[keySort];
+        REVERSE_FLAGS[keySort]=!REVERSE_FLAGS[keySort];
 
-        let isReversed=reverseFlags[keySort];
+        let isReversed=REVERSE_FLAGS[keySort];
 
-        data.sort((firstElem,secondElem)=>{
+        DATA.sort((firstElem,secondElem)=>{
 
             //by size
             if(typeof firstElem[keySort] === 'number'){
@@ -180,25 +175,50 @@ window.onload=()=> {
      */
     function buildTable() {
         clearTable();
+
         /*initiation*/
-        for (let index = 0; index < rowsCount; index++) {
-            let row = tableBody.insertRow(0);
-            /*file name*/
-            let cell = row.insertCell(0);
-            cell.innerHTML = "<a href='#'>" + data[index].file + '</a>';
+        for (let index = 0; index < ROWS_COUNT; index++) {
+            let d = DATA[index].date;
 
-            /**/
-            cell = row.insertCell(-1);
-            cell.innerHTML = data[index].size;
+            table.children().filter('tbody').append(
+                $('<tr>')
 
-            let d = data[index].date;
-
-            cell = row.insertCell(-1);
-            cell.innerHTML = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " +
-                d.getHours() + ":" + d.getMinutes();
-
-            cell = row.insertCell(-1);
-            cell.innerHTML = "<a href='#' class='link-delete'>Удалить</a>";
+                /*file name*/
+                    .append(
+                        $('<td>')
+                            .append(
+                                $('<a>')
+                                    .attr('href','#')
+                                    .html(DATA[index].file)
+                            )
+                    )
+                    /*file size*/
+                    .append(
+                        $('<td>')
+                            .append(
+                                $('<a>')
+                                    .attr('href','#')
+                                    .html(DATA[index].size)
+                            )
+                    )
+                    /*date and time*/
+                    .append(
+                        $('<td>').append(
+                            $('<a>')
+                                .attr('href','#')
+                                .html(d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " +
+                                    d.getHours() + ":" + d.getMinutes())
+                        )
+                    )
+                    .append(
+                        $('<td>').append(
+                            $('<a>')
+                                .attr('href','#')
+                                .addClass('link-delete')
+                                .html('Удалить')
+                        )
+                    )
+            );
         }
     }
 
@@ -206,6 +226,6 @@ window.onload=()=> {
      * Clears tableBody body
      */
     function clearTable(){
-        tableBody.innerHTML="";
+        $(tableBody).html("");
     }
-};
+});

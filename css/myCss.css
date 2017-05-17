@@ -101,14 +101,47 @@ aside{
     text-align: right;
 }
 
-.stick-span-right{
+.stick-span-left{
     position:relative;
     margin: 20px;
     clear: both;
     float: left;
     width: 100%;
     text-align: left;
-    color:red;
+    color:#FF0000;
+}
+
+
+th.empty:after{
+    content: "" !important;
+}
+
+th:after{
+    content: url('img/bg.gif');
+    margin:auto;
+}
+
+th.asc,th.desc{
+    background-color: #d3d3d3;
+}
+th.desc:after{
+    content: url('img/desc.gif');
+    margin:auto;
+}
+
+th.asc:after{
+    content: url('img/asc.gif');
+    margin:auto;
+}
+
+.stick-span-right{
+    position:relative;
+    margin: 20px;
+    clear: both;
+    float: right;
+    width: 35%;
+    text-align: left;
+    color:#0000FF;
 }
 
 .stick-input{
